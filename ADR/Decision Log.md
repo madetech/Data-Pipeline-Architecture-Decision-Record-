@@ -131,20 +131,59 @@ The decision is to use AWS S3 due to its high scalability and low storage cost p
 # 005 - Component Decision: AWS EventBridge 
 
 ## Context 
+To automate the process between when a file is landed, and when a file is processed, the project requires usage of event driven architecture. 
 
+Event driven architecture simplifies the typical batch processing load process; allowing for data to be processed at anytime.
+
+### Other Considerations 
+- Confluent
+- Snowflake SnowPipe
+- Amazon Eventbridge
+- Amazon Simple Queue Service (SQS)
+- Amazon Simple Notification Service (SNS)
+- Amazon API Gateway
 
 ## Decision 
+The decision is to use AWS EventBridge to act as a automation layer between AWS S3 and the AWS Lambda which is responsible for data transformations. 
 
 ## Consequences 
-
+### Advantages 
+- No to low-code interface with syncing services
+- Can create different types of rules
+- No upfront costs of usage
+### Disadvantages
+- Has a limit of up to 5 different AWS services
+  
 # 006 - Component Decision: AWS RDS 
 
 ## Context 
 
-## Decision 
+### Other Considerations 
+- AWS DyanamoDB
+- Amazon Aurora
 
+## Decision 
+The decision is to use AWS RDS, due to its high availabilty, and wide choice of database engines. 
+
+Unlike DynamoDB, AWS RDS follows a strict Relational schema, which allows for consistent transactions between scripts and the database. 
+
+Where DynamoDB has advantages in its NoSQL architecture. Extra considerations must be put in place to choosing the correct partition key for the data. 
+
+Due to the volume and variety of data consumed by the APIs, DynamoDB would struggle to scale as more sources are added to the pipeline. 
+
+### Database Engine Decision 
+After thoughtful consideration, the decision is to use PostgreSQL for the database engine. 
+
+This is due to PostgreSQL being open source, and its availability across the three main operating systems, Mac, Linux and Windows. 
+
+PGAdmin4 or DBeaver make for simple user interfaces, which allow users to directly connect to the database to retrieve data. 
+
+Furthermore, PostgreSQL supports schemas, which can be used to separate the different layers of the transformation process. 
 ## Consequences 
 
 ### Advantages 
-
+- Automated database snapshots / backups
+- Ability to control inbound / outbound networking rules for different users. 
 ### Disadvantages 
+- Strict schema requirements
+- Requires further configurations using user personas and profiles within the database. 
