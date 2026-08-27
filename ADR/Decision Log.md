@@ -158,6 +158,7 @@ The decision is to use AWS EventBridge to act as a automation layer between AWS 
 # 006 - Component Decision: AWS RDS 
 
 ## Context 
+To provide a storage solution to data which has been successfully transformed within the project. 
 
 ### Other Considerations 
 - AWS DyanamoDB
@@ -188,3 +189,46 @@ Furthermore, PostgreSQL supports schemas, which can be used to separate the diff
 ### Disadvantages 
 - Strict schema requirements
 - Requires further configurations using user personas and profiles within the database. 
+
+# 007 - Version Control Strategy 
+
+## Context 
+Provision of a suitable version control methodology to allow for swift and efficient changes made within the project. 
+
+## References Considered 
+
+- https://dev.to/karmpatel/git-branching-strategies-a-comprehensive-guide-24kh#choosing-the-right-strategy
+- https://medium.com/@sreekanth.thummala/choosing-the-right-git-branching-strategy-a-comparative-analysis-f5e635443423
+- https://www.abtasty.com/blog/git-branching-strategies/
+
+### Strategies Considered  
+- Git Flow
+- Github Flow
+- Trunk-Based Development
+- Feature Branching
+- Environment Branching
+- Release Branching
+- Forking Workflow 
+
+## Decision 
+The decision was split between **Git Flow** and **Feature Branching** strategies. 
+Both strategies are simple to implement, and accommodate the smaller team size. 
+
+The overall decision was to go with a Git Flow strategy; featuring an extra branch, **Dev**, to act as a buffer for new changes before pushing these newer changes to main. 
+
+<img width="1626" height="620" alt="image" src="https://github.com/user-attachments/assets/de2239eb-4355-4c16-a60d-0367d95068e0" />
+
+
+
+## Consequences 
+
+### Advantages 
+- Suitable for a small team (around 5-6 people)
+- Minimizes branch management
+- Supports continuous deployments
+  
+### Disadvantages 
+- Does not scale well for larger teams (20+ people)
+- No clear branches for running tests
+- Poor agility in managing releases
+ 
