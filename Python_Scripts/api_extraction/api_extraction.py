@@ -1,3 +1,4 @@
+import boto3
 import requests
 import pandas as pd
 import time 
@@ -6,6 +7,7 @@ from json.decoder import JSONDecodeError
 # requests.Session 
 # http.client 
 
+s3_client = boto3.client('s3')
 
 # 'https://fakestoreapi.com/products'
 def get_requests(endpoint_url : str, starting_record_number : int, rate_limit : int=0, all=True):
@@ -50,8 +52,13 @@ def save_file(dataframe : pd.DataFrame, file_name : str, file_type : str):
     if file_type == 'csv':
         dataframe.to_csv(file_name, index=False)
 
-def file_transfer_to_s3():
-    pass       
+def file_transfer_to_s3(file_name : str, object_name : str, bucket_name : str):
+    try: 
+        s3_client.upload_file(file_name, bucket_name, object_name)
+        print(f"Uploaded {file_name} to S3 bucket {bucket_name} to {object_name}")
+    except Exception as e: 
+        print(f"Failed to upload {file_name} to S3 {e}")
+        raise e    
 
 if __name__ == '__main__':
     list_of_requests = get_requests('https://fakestoreapi.com/products', 1, rate_limit=2, all=False)
