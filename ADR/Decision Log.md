@@ -1,5 +1,5 @@
 # Overview 
-Last Updated: 20/08/2026
+Last Updated: 1/09/2026
 
 This document details the decisions made for the project. 
 
@@ -232,3 +232,116 @@ The overall decision was to go with a Git Flow strategy; featuring an extra bran
 - No clear branches for running tests
 - Poor agility in managing releases
  
+# 008 - Data Transformations Script Strategy 
+
+## Context 
+
+Creation of a reusable python framework, which is suitable for reading, transforming and loading data into the target database. 
+
+## Approaches Considered 
+
+### Functional Programming
+A singular .py script, which contains all of the necessary functions needed to perform the ETL process. 
+
+A main function would be responsible for running the full process. 
+
+#### Functions considered 
+
+- extract_from_s3 
+- extract_from_source_db
+
+If the medallion architecture is chosen, the outputs of these functions would represent the bronze layer of the pipeline. 
+
+- connect_to_db
+  
+Function to create a connection to the database using sqlalchemy 
+
+- load_to_db
+  
+Uploads tables to the database using the connection created in **connect_to_db**
+
+- create_metadata_table
+  
+Creates a metadata_table responsible for giving instructions on how the data will be processed in the pipeline.
+
+- apply_primary_foreign_keys
+  
+Runs a .sql script against specified tables within the database, applying their primary and foreign key relationships.
+
+###### Medallion Architecture Specific Functions 
+
+- preserve_history
+
+A function responsible for preserving historical records of the pipeline if needed. 
+
+- create_silver_table
+  
+Creates the silver table for the pipeline.
+Calls the perserve_history function inside the create_silver_table to create a table with historical records intact
+
+- create_gold_table
+  
+Creates an up-to-date, latest version of the data.
+
+Tables are then used to create the data model. 
+
+
+##### Custom Framework Functions 
+
+Each function below is responsible for creating each of the tables within each of the processing layers 
+
+- create_staging_table
+
+Creates a temporary staging table based on information from the metadata table. 
+
+Within this layer, tables are dropped and recreated on each run. 
+
+- create_history_table
+
+Creates a consolidated historical table, which contains up-to-date and historical records for the table, which is being processed. 
+
+The records are assessed by comparing hashes between the current staging table, and the current history table. 
+
+If there are differences between the hashes, only the latest records are merged into the history table. 
+
+- create_surrogate_key_table
+
+Creates a table, which manages the surrogate keys for each of the tables processed within the pipeline. 
+
+NOTE: this layer may be skipped if the data is being replaced, and history is not being preserved. 
+
+- transform_data_source
+A function which provides custom logic to transform the data_extracted from the data source.
+
+Relies on other helper functions to execute depending on what table is being processed. 
+
+There is an appetite for this function to be placed inside a separate .py script should the complexities increase the level of technical debt. 
+
+- create_dimensional_table
+
+Creates an up-to-date dimension table using the outputs of the surrogate key and historical tables. 
+
+- create_fact_table
+
+Creates a fact table based on the outputs of the dimensional tables. 
+
+The level of granularity of the fact table can be set by the user via the metadata table. 
+
+- main
+  
+Main function, which runs the entire pipeline.
+
+Function order is dependent the framework chosen: medallion or custom framework. (TO BE DECIDED) 
+
+### Object Oriented Programming 
+Utilization of Python classes to create custom python modules to be called inside a main.py 
+
+
+## Decision 
+
+## Consequences 
+
+### Advantages 
+
+### Disadvantages 
+
