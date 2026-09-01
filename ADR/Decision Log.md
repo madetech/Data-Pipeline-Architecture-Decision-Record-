@@ -336,6 +336,54 @@ Function order is dependent the framework chosen: medallion or custom framework.
 ### Object Oriented Programming 
 Utilization of Python classes to create custom python modules to be called inside a main.py 
 
+#### Scripts and Classes 
+
+##### data_ingestion.py 
+
+A script responsible for the ingestion of data. 
+
+Contains a class **DataIngestor** which contains the following methods 
+
+- extract_from_s3
+
+- extract_from_source_db
+
+If the medallion architecture is chosen, the outputs of these functions would represent the bronze layer of the pipeline. 
+
+
+##### historical_data.py 
+
+A script which contains the handling of historical data and records. 
+
+Contains the class **HistoricalDataProcessor**
+
+- create_hash_column
+
+Creates a hash column to be used to compare rows within the tables. 
+
+The hash column created is dependent on a subset of columns to compare records. 
+
+- compare_hashes
+
+Takes in two tables to compare their hashes. 
+
+Records are identified with the following flags. 
+
+Identical (I) 
+Changed (C) 
+New (N) 
+
+New and changed records are appended to the historical table. 
+
+##### data_connector.py 
+
+- connect_to_db
+  
+Function to create a connection to the database using sqlalchemy 
+
+- load_to_db
+  
+Uploads tables to the database using the connection created in **connect_to_db**
 
 ## Decision 
 
