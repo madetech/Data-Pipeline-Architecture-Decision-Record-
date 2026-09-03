@@ -393,3 +393,27 @@ Uploads tables to the database using the connection created in **connect_to_db**
 
 ### Disadvantages 
 
+
+# 009 - AWS Lambda Deployment Strategy Using Lambda Layers
+
+## Context 
+
+## Decision 
+
+## Consequences 
+
+### Advantages 
+
+### Disadvantages
+
+# 010 - Component Decision -  AWS EventBridge Scheduler 
+
+## Context 
+
+## Decision 
+
+## Consequences 
+
+### Advantages 
+
+### Disadvantages
