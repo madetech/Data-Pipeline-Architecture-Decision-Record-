@@ -10,7 +10,8 @@ AWS Eventbridge acts as a trigger to call the **data_transformation** lambda fun
 
 
 # High Level Overview Diagram 
-<img width="1034" height="326" alt="image" src="https://github.com/user-attachments/assets/af6dc28b-2eef-4462-8043-b4299a223df2" />
+<img width="954" height="289" alt="Screenshot 2026-09-03 at 17 07 31" src="https://github.com/user-attachments/assets/d0aa0771-0b91-487b-bd47-aa844f769c12" />
+
 
 # Use Cases 
 
